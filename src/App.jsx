@@ -150,14 +150,17 @@ const StartupInvestmentPlatform = () => {
         <div className="flex gap-4 justify-center">
           <button
             onClick={() => setView('founder')}
-            className="bg-white text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-opacity-90 transition flex items-center gap-2"
+           className="border-2 border-blue-900 bg-white text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg
+              hover:bg-blue-900 hover:border-white hover:text-white transition flex items-center gap-2"
           >
             <Users size={24} />
             Founder Portal
           </button>
           <button
             onClick={() => setView('analyst')}
-            className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:bg-opacity-10 transition flex items-center gap-2"
+            className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg
+             hover:bg-white hover:text-blue-900 hover:border-blue-900
+             transition flex items-center gap-2"
           >
             <BarChart3 size={24} />
             Analyst Dashboard
