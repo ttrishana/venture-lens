@@ -1,0 +1,654 @@
+import React, { useState } from 'react';
+import { Building2, TrendingUp, Shield, CheckCircle, XCircle, AlertCircle, Upload, BarChart3, FileText, Users, DollarSign, Lock, Scale, Target } from 'lucide-react';
+
+const StartupInvestmentPlatform = () => {
+  const [view, setView] = useState('welcome');
+  const [formData, setFormData] = useState({
+    companyName: '',
+    stage: '',
+    industry: '',
+    problemStatement: '',
+    solution: '',
+    capitalNeeded: '',
+    currentRevenue: ''
+  });
+
+  const loadSampleStartup = () => {
+    setFormData({
+      companyName: 'PayStream Analytics',
+      stage: 'early',
+      industry: 'FinTech / Embedded Finance',
+      problemStatement: 'Small and medium businesses struggle to predict cash flow accurately, leading to 82% of business failures due to poor cash management. Traditional accounting software only shows historical data, leaving business owners blind to upcoming financial challenges. Banks have limited visibility into SMB financial health beyond credit scores, making lending decisions slower and riskier.',
+      solution: 'PayStream Analytics uses AI to predict cash flow 90 days ahead with 94% accuracy by analyzing invoice patterns, payment histories, seasonal trends, and market signals. Our embedded finance platform integrates directly into existing banking apps, providing real-time insights to both businesses and their banks. For SMBs: predictive alerts prevent overdrafts and optimize payment timing. For banks: enhanced credit risk assessment enables faster loan approvals and proactive relationship management.',
+      capitalNeeded: '$2,500,000',
+      currentRevenue: '$340,000 ARR'
+    });
+  };
+  const [evaluationData, setEvaluationData] = useState(null);
+
+  // BMO Color Palette
+  const colors = {
+    primary: '#0075BE', // BMO Blue
+    secondary: '#CC0000', // BMO Red
+    success: '#00A94F',
+    warning: '#FFB81C',
+    background: '#F5F7FA',
+    text: '#1A1A1A'
+  };
+
+  const handleSubmit = () => {
+    // Simulate AI processing with dynamic evaluation based on form data
+    const isPayStream = formData.companyName === 'PayStream Analytics';
+    
+    const mockEvaluation = {
+      classification: isPayStream ? 'FinTech / Embedded Finance & Predictive Analytics' : 'FinTech / Digital Banking',
+      analogousIndustries: isPayStream 
+        ? ['Traditional Banking Software', 'Business Intelligence Platforms', 'Credit Risk Assessment Tools', 'SaaS Financial Management']
+        : ['Traditional Banking', 'Payment Processing', 'Regulatory Compliance Software'],
+      dimensions: {
+        financial: {
+          score: isPayStream ? 82 : 78,
+          metrics: {
+            capitalEfficiency: isPayStream ? 85 : 82,
+            roiProjection: isPayStream ? 81 : 75,
+            revenuePotential: isPayStream ? 80 : 77
+          }
+        },
+        technology: {
+          score: isPayStream ? 88 : 85,
+          metrics: {
+            feasibility: isPayStream ? 92 : 88,
+            integrationComplexity: isPayStream ? 84 : 80,
+            securityPosture: isPayStream ? 88 : 87
+          }
+        },
+        operations: {
+          score: isPayStream ? 76 : 72,
+          metrics: {
+            regulatoryReadiness: isPayStream ? 74 : 68,
+            scalability: isPayStream ? 80 : 78,
+            onboardingComplexity: isPayStream ? 74 : 70
+          }
+        },
+        strategy: {
+          score: isPayStream ? 86 : 81,
+          metrics: {
+            marketAlignment: isPayStream ? 90 : 85,
+            customerReach: isPayStream ? 84 : 79,
+            partnershipValue: isPayStream ? 85 : 80
+          }
+        }
+      },
+      risks: isPayStream ? [
+        { 
+          category: 'Regulatory', 
+          level: 'Medium', 
+          description: 'Must comply with financial data protection standards (PCI-DSS, SOC 2) and banking partnership regulations. AI-driven credit insights may require additional regulatory scrutiny.',
+          mitigation: 'Engage compliance consultants early, obtain SOC 2 Type II certification, establish clear data governance framework, partner with regulated financial institutions to leverage their compliance infrastructure'
+        },
+        { 
+          category: 'Market', 
+          level: 'Low', 
+          description: 'Competitive landscape includes established players like Intuit and emerging AI competitors. Customer acquisition in crowded market requires strong differentiation.',
+          mitigation: 'Focus on embedded finance strategy to leverage bank distribution channels, emphasize superior prediction accuracy (94% vs industry average 75-80%), build strong bank partnership moat'
+        },
+        { 
+          category: 'Technology', 
+          level: 'Medium', 
+          description: 'AI model accuracy depends on data quality and variety. Integration with diverse banking systems and accounting platforms presents technical complexity. Model drift risk as market conditions change.',
+          mitigation: 'Implement robust data validation pipelines, build API-first architecture with standardized connectors, establish continuous model monitoring and retraining protocols, maintain 6-month runway of historical data for model updates'
+        },
+        {
+          category: 'Operational',
+          level: 'Low',
+          description: 'Scaling customer success and implementation teams while maintaining service quality. Managing multiple bank partnership SLAs simultaneously.',
+          mitigation: 'Develop self-service onboarding tools, create comprehensive documentation and training materials, implement tiered support model, automate routine implementation tasks'
+        }
+      ] : [
+        { category: 'Regulatory', level: 'Medium', description: 'Requires compliance with banking regulations', mitigation: 'Partner with regulatory consultants, implement compliance framework early' },
+        { category: 'Market', level: 'Low', description: 'Competitive landscape is evolving', mitigation: 'Focus on differentiation through superior UX and AI capabilities' },
+        { category: 'Technology', level: 'Medium', description: 'Integration with legacy banking systems', mitigation: 'Adopt API-first architecture, phased rollout strategy' }
+      ],
+      recommendation: isPayStream ? 'Fund' : 'Fund',
+      confidence: isPayStream ? 85 : 82,
+      projections: isPayStream ? {
+        year1: { revenue: 1200000, growth: 250, roi: 22, customers: 450, expansion: 'Launch with 3 tier-1 bank partnerships, expand SMB user base to 450 businesses' },
+        year3: { revenue: 6800000, growth: 420, roi: 185, customers: 2800, expansion: 'Scale to 12 bank partnerships across US and Canada, achieve 2,800+ SMB customers, introduce predictive lending module' },
+        year5: { revenue: 18500000, growth: 580, roi: 410, customers: 8500, expansion: 'International expansion (UK, Australia), enterprise tier for banks with 10k+ SMB customers, AI-powered working capital optimization suite' }
+      } : {
+        year1: { revenue: 850000, growth: 120, roi: 15 },
+        year3: { revenue: 4200000, growth: 185, roi: 145 },
+        year5: { revenue: 12800000, growth: 220, roi: 340 }
+      },
+      keyStrengths: isPayStream ? [
+        'Strong product-market fit evidenced by $340k ARR with minimal marketing spend',
+        'Compelling value proposition solving critical pain point (82% of SMB failures due to cash flow issues)',
+        '94% prediction accuracy significantly exceeds industry benchmarks',
+        'Dual revenue model (SMB subscriptions + bank licensing) provides diversification',
+        'Embedded finance strategy creates distribution advantage and higher switching costs',
+        'Clear path to bank partnerships through risk mitigation value proposition'
+      ] : [],
+      considerations: isPayStream ? [
+        'Early stage revenue requires validation of scalability and unit economics',
+        'Dependence on bank partnerships for distribution creates concentration risk',
+        'Model accuracy must be maintained across diverse business types and economic conditions',
+        'Customer acquisition cost and lifetime value metrics need continued monitoring',
+        'Competitive moat relies heavily on prediction accuracy and bank relationships'
+      ] : []
+    };
+    
+    setEvaluationData(mockEvaluation);
+    setView('results');
+  };
+
+  const WelcomeScreen = () => (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, #005A8C 100%)` }}>
+      <div className="text-center text-white p-8 max-w-3xl">
+        <Building2 size={80} className="mx-auto mb-6" />
+        <h1 className="text-5xl font-bold mb-4">BMO Innovation Investment Platform</h1>
+        <p className="text-xl mb-8 opacity-90">AI-Powered Startup Evaluation System</p>
+        <div className="flex gap-4 justify-center">
+          <button
+            onClick={() => setView('founder')}
+            className="bg-white text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-opacity-90 transition flex items-center gap-2"
+          >
+            <Users size={24} />
+            Founder Portal
+          </button>
+          <button
+            onClick={() => setView('analyst')}
+            className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:bg-opacity-10 transition flex items-center gap-2"
+          >
+            <BarChart3 size={24} />
+            Analyst Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const FounderIntake = () => (
+    <div className="min-h-screen bg-gray-50">
+      <div style={{ backgroundColor: colors.primary }} className="text-white p-6 shadow-lg">
+        <div className="max-w-4xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <Building2 size={32} />
+            <h1 className="text-2xl font-bold">Founder Application Portal</h1>
+          </div>
+          <button onClick={() => setView('welcome')} className="text-white opacity-80 hover:opacity-100">
+            Back to Home
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto p-8">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-3xl font-bold mb-2" style={{ color: colors.text }}>Submit Your Startup</h2>
+          <p className="text-gray-600 mb-8">Tell us about your vision. We're excited to learn about your innovation.</p>
+
+          <div className="mb-6">
+            <button
+              onClick={loadSampleStartup}
+              className="w-full bg-gray-100 border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
+            >
+              📋 Load Sample Startup (PayStream Analytics)
+            </button>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{ color: colors.text }}>Company Name *</label>
+              <input
+                type="text"
+                value={formData.companyName}
+                onChange={(e) => setFormData({...formData, companyName: e.target.value})}
+                className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-blue-500 focus:outline-none"
+                placeholder="Your Company Inc."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{ color: colors.text }}>Company Stage *</label>
+              <select
+                value={formData.stage}
+                onChange={(e) => setFormData({...formData, stage: e.target.value})}
+                className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-blue-500 focus:outline-none"
+              >
+                <option value="">Select stage...</option>
+                <option value="idea">Idea Stage</option>
+                <option value="mvp">MVP / Prototype</option>
+                <option value="early">Early Revenue</option>
+                <option value="growth">Growth Stage</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{ color: colors.text }}>Industry / Sector *</label>
+              <input
+                type="text"
+                value={formData.industry}
+                onChange={(e) => setFormData({...formData, industry: e.target.value})}
+                className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-blue-500 focus:outline-none"
+                placeholder="e.g., FinTech, HealthTech, AI/ML"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{ color: colors.text }}>Problem Statement *</label>
+              <textarea
+                value={formData.problemStatement}
+                onChange={(e) => setFormData({...formData, problemStatement: e.target.value})}
+                className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-blue-500 focus:outline-none h-32"
+                placeholder="What critical problem are you solving?"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{ color: colors.text }}>Solution Overview *</label>
+              <textarea
+                value={formData.solution}
+                onChange={(e) => setFormData({...formData, solution: e.target.value})}
+                className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-blue-500 focus:outline-none h-32"
+                placeholder="Describe your solution and how it addresses the problem"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2" style={{ color: colors.text }}>Capital Needed</label>
+                <input
+                  type="text"
+                  value={formData.capitalNeeded}
+                  onChange={(e) => setFormData({...formData, capitalNeeded: e.target.value})}
+                  className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-blue-500 focus:outline-none"
+                  placeholder="$500,000"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-2" style={{ color: colors.text }}>Current Annual Revenue</label>
+                <input
+                  type="text"
+                  value={formData.currentRevenue}
+                  onChange={(e) => setFormData({...formData, currentRevenue: e.target.value})}
+                  className="w-full border-2 border-gray-300 rounded-lg p-3 focus:border-blue-500 focus:outline-none"
+                  placeholder="$0 or current revenue"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{ color: colors.text }}>Upload Documents</label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition cursor-pointer">
+                <Upload size={40} className="mx-auto mb-3 text-gray-400" />
+                <p className="text-gray-600 mb-1">Drop files here or click to upload</p>
+                <p className="text-sm text-gray-400">Pitch deck, financials, product demo links (PDF, PPT, XLSX)</p>
+              </div>
+            </div>
+
+            <button
+              onClick={handleSubmit}
+              style={{ backgroundColor: colors.primary }}
+              className="w-full text-white py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition"
+            >
+              Submit Application for AI Review
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const ResultsView = () => {
+    if (!evaluationData) return null;
+
+    const getRecommendationColor = (rec) => {
+      if (rec === 'Fund') return colors.success;
+      if (rec === 'Partially Fund') return colors.warning;
+      return colors.secondary;
+    };
+
+    const getRecommendationIcon = (rec) => {
+      if (rec === 'Fund') return <CheckCircle size={40} />;
+      if (rec === 'Partially Fund') return <AlertCircle size={40} />;
+      return <XCircle size={40} />;
+    };
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div style={{ backgroundColor: colors.primary }} className="text-white p-6 shadow-lg">
+          <div className="max-w-6xl mx-auto flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <BarChart3 size={32} />
+              <h1 className="text-2xl font-bold">AI Evaluation Results</h1>
+            </div>
+            <button onClick={() => setView('welcome')} className="text-white opacity-80 hover:opacity-100">
+              Back to Home
+            </button>
+          </div>
+        </div>
+
+        <div className="max-w-6xl mx-auto p-8 space-y-6">
+          {/* Recommendation Card */}
+          <div className="bg-white rounded-lg shadow-lg p-8" style={{ borderLeft: `8px solid ${getRecommendationColor(evaluationData.recommendation)}` }}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-4">
+                <div style={{ color: getRecommendationColor(evaluationData.recommendation) }}>
+                  {getRecommendationIcon(evaluationData.recommendation)}
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold" style={{ color: getRecommendationColor(evaluationData.recommendation) }}>
+                    {evaluationData.recommendation}
+                  </h2>
+                  <p className="text-gray-600">AI Confidence: {evaluationData.confidence}%</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-gray-500">Company Submitted</p>
+                <p className="font-semibold text-lg">{formData.companyName}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Industry Classification */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: colors.text }}>
+              <Target size={24} style={{ color: colors.primary }} />
+              Industry Classification & Context
+            </h3>
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Primary Classification</p>
+                <p className="font-semibold text-lg" style={{ color: colors.primary }}>{evaluationData.classification}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Analogous Industries for Benchmarking</p>
+                <div className="flex gap-2 flex-wrap">
+                  {evaluationData.analogousIndustries.map((ind, i) => (
+                    <span key={i} className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                      {ind}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Evaluation Dimensions */}
+          <div className="grid grid-cols-2 gap-6">
+            {Object.entries(evaluationData.dimensions).map(([key, data]) => {
+              const icons = {
+                financial: <DollarSign size={24} />,
+                technology: <Building2 size={24} />,
+                operations: <Scale size={24} />,
+                strategy: <Target size={24} />
+              };
+              
+              return (
+                <div key={key} className="bg-white rounded-lg shadow-lg p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div style={{ color: colors.primary }}>{icons[key]}</div>
+                    <h4 className="text-lg font-bold capitalize">{key} Viability</h4>
+                  </div>
+                  <div className="mb-4">
+                    <div className="flex justify-between mb-1">
+                      <span className="text-sm text-gray-600">Overall Score</span>
+                      <span className="font-bold" style={{ color: data.score >= 75 ? colors.success : colors.warning }}>
+                        {data.score}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-3">
+                      <div
+                        className="h-3 rounded-full transition-all"
+                        style={{
+                          width: `${data.score}%`,
+                          backgroundColor: data.score >= 75 ? colors.success : colors.warning
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    {Object.entries(data.metrics).map(([metric, value]) => (
+                      <div key={metric} className="flex justify-between text-sm">
+                        <span className="text-gray-600 capitalize">{metric.replace(/([A-Z])/g, ' $1').trim()}</span>
+                        <span className="font-medium">{value}%</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Risk Assessment */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: colors.text }}>
+              <Shield size={24} style={{ color: colors.primary }} />
+              Risk Assessment & Mitigation
+            </h3>
+            <div className="space-y-4">
+              {evaluationData.risks.map((risk, i) => {
+                const levelColor = risk.level === 'High' ? colors.secondary : risk.level === 'Medium' ? colors.warning : colors.success;
+                return (
+                  <div key={i} className="border-l-4 pl-4 py-2" style={{ borderColor: levelColor }}>
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="font-bold">{risk.category} Risk</span>
+                      <span className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ backgroundColor: levelColor }}>
+                        {risk.level}
+                      </span>
+                    </div>
+                    <p className="text-gray-700 mb-2">{risk.description}</p>
+                    <p className="text-sm text-gray-600"><strong>Mitigation:</strong> {risk.mitigation}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Financial Projections */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: colors.text }}>
+              <TrendingUp size={24} style={{ color: colors.primary }} />
+              Financial Projections & Growth Trajectory
+            </h3>
+            <div className="grid grid-cols-3 gap-6">
+              {Object.entries(evaluationData.projections).map(([year, data]) => (
+                <div key={year} className="text-center p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-500 mb-2 font-semibold">{year === 'year1' ? 'Year 1' : year === 'year3' ? 'Year 3' : 'Year 5'}</p>
+                  <p className="text-2xl font-bold mb-1" style={{ color: colors.primary }}>
+                    ${(data.revenue / 1000000).toFixed(1)}M
+                  </p>
+                  <p className="text-sm text-gray-600 mb-1">Projected Revenue</p>
+                  <div className="flex justify-around text-xs mt-3 mb-3">
+                    <div>
+                      <p className="text-gray-500">Growth</p>
+                      <p className="font-bold text-green-600">+{data.growth}%</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">ROI</p>
+                      <p className="font-bold text-green-600">{data.roi}%</p>
+                    </div>
+                  </div>
+                  {data.customers && (
+                    <div className="mt-2 pt-2 border-t border-gray-200">
+                      <p className="text-xs text-gray-500">Customer Base</p>
+                      <p className="font-bold text-sm">{data.customers.toLocaleString()}</p>
+                    </div>
+                  )}
+                  {data.expansion && (
+                    <p className="text-xs text-gray-600 mt-2 text-left">{data.expansion}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Key Strengths & Considerations */}
+          {evaluationData.keyStrengths && evaluationData.keyStrengths.length > 0 && (
+            <div className="grid grid-cols-2 gap-6">
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: colors.success }}>
+                  <CheckCircle size={24} />
+                  Key Strengths
+                </h3>
+                <ul className="space-y-2">
+                  {evaluationData.keyStrengths.map((strength, i) => (
+                    <li key={i} className="flex gap-2 text-sm text-gray-700">
+                      <span className="text-green-500 font-bold">✓</span>
+                      <span>{strength}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: colors.warning }}>
+                  <AlertCircle size={24} />
+                  Considerations
+                </h3>
+                <ul className="space-y-2">
+                  {evaluationData.considerations.map((consideration, i) => (
+                    <li key={i} className="flex gap-2 text-sm text-gray-700">
+                      <span className="text-yellow-500 font-bold">→</span>
+                      <span>{consideration}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Human Oversight Note */}
+          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
+            <div className="flex gap-3">
+              <AlertCircle size={24} style={{ color: colors.primary }} className="flex-shrink-0 mt-1" />
+              <div>
+                <h4 className="font-bold mb-2" style={{ color: colors.primary }}>Human Decision Authority</h4>
+                <p className="text-gray-700">
+                  This AI evaluation provides data-driven insights to support investment decisions. Final approval authority 
+                  rests with BMO investment analysts and decision-makers. This recommendation should be reviewed in context 
+                  of portfolio strategy, market conditions, and qualitative factors beyond AI assessment.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const AnalystDashboard = () => (
+    <div className="min-h-screen bg-gray-50">
+      <div style={{ backgroundColor: colors.primary }} className="text-white p-6 shadow-lg">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <Lock size={32} />
+            <h1 className="text-2xl font-bold">Bank Analyst Dashboard</h1>
+          </div>
+          <button onClick={() => setView('welcome')} className="text-white opacity-80 hover:opacity-100">
+            Back to Home
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto p-8">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-2xl font-bold mb-6" style={{ color: colors.text }}>Recent Submissions</h2>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b-2" style={{ borderColor: colors.primary }}>
+                  <th className="text-left p-3">Company</th>
+                  <th className="text-left p-3">Stage</th>
+                  <th className="text-left p-3">Industry</th>
+                  <th className="text-left p-3">AI Score</th>
+                  <th className="text-left p-3">Recommendation</th>
+                  <th className="text-left p-3">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b hover:bg-gray-50">
+                  <td className="p-3 font-semibold">FinFlow Technologies</td>
+                  <td className="p-3">Early Revenue</td>
+                  <td className="p-3">FinTech</td>
+                  <td className="p-3">
+                    <span className="font-bold text-green-600">79%</span>
+                  </td>
+                  <td className="p-3">
+                    <span className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ backgroundColor: colors.success }}>
+                      Fund
+                    </span>
+                  </td>
+                  <td className="p-3">
+                    <button className="text-blue-600 hover:underline">Review Details</button>
+                  </td>
+                </tr>
+                <tr className="border-b hover:bg-gray-50">
+                  <td className="p-3 font-semibold">HealthSync AI</td>
+                  <td className="p-3">MVP</td>
+                  <td className="p-3">HealthTech</td>
+                  <td className="p-3">
+                    <span className="font-bold text-yellow-600">68%</span>
+                  </td>
+                  <td className="p-3">
+                    <span className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ backgroundColor: colors.warning }}>
+                      Partial Fund
+                    </span>
+                  </td>
+                  <td className="p-3">
+                    <button className="text-blue-600 hover:underline">Review Details</button>
+                  </td>
+                </tr>
+                <tr className="border-b hover:bg-gray-50">
+                  <td className="p-3 font-semibold">CryptoVault Pro</td>
+                  <td className="p-3">Idea</td>
+                  <td className="p-3">Blockchain</td>
+                  <td className="p-3">
+                    <span className="font-bold text-red-600">42%</span>
+                  </td>
+                  <td className="p-3">
+                    <span className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ backgroundColor: colors.secondary }}>
+                      Decline
+                    </span>
+                  </td>
+                  <td className="p-3">
+                    <button className="text-blue-600 hover:underline">Review Details</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-8 p-6 bg-gray-50 rounded-lg">
+            <h3 className="font-bold mb-4" style={{ color: colors.text }}>Portfolio Insights</h3>
+            <div className="grid grid-cols-3 gap-6">
+              <div className="text-center">
+                <p className="text-3xl font-bold" style={{ color: colors.success }}>12</p>
+                <p className="text-gray-600">Recommended to Fund</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl font-bold" style={{ color: colors.warning }}>8</p>
+                <p className="text-gray-600">Partial Funding</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl font-bold" style={{ color: colors.secondary }}>15</p>
+                <p className="text-gray-600">Declined</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="font-sans">
+      {view === 'welcome' && <WelcomeScreen />}
+      {view === 'founder' && <FounderIntake />}
+      {view === 'results' && <ResultsView />}
+      {view === 'analyst' && <AnalystDashboard />}
+    </div>
+  );
+};
+
+export default StartupInvestmentPlatform;
