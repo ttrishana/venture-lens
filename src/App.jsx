@@ -12,6 +12,8 @@ const StartupInvestmentPlatform = () => {
     capitalNeeded: '',
     currentRevenue: ''
   });
+  const [userRole, setUserRole] = useState(null); // 'founder' | 'analyst' | null
+
 
   const loadSampleStartup = () => {
     setFormData({
@@ -141,6 +143,46 @@ const StartupInvestmentPlatform = () => {
     setView('results');
   };
 
+  const SignInScreen = () => (
+    <div
+      className="min-h-screen flex items-center justify-center"
+      style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, #005A8C 100%)` }}
+    >
+      <div className="bg-white rounded-xl shadow-xl p-10 max-w-md w-full text-center">
+        <Building2 size={56} className="mx-auto mb-4 text-blue-600" />
+        <h1 className="text-3xl font-bold mb-2">BMO Innovation Platform</h1>
+        <p className="text-gray-600 mb-8">
+          Sign in to continue
+        </p>
+  
+        <div className="space-y-4">
+          <button
+            onClick={() => {
+              setUserRole('founder');
+              setView('founder');
+            }}
+            className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-4 rounded-lg font-semibold hover:opacity-90 transition"
+          >
+            <Users size={20} />
+            Sign in as Founder
+          </button>
+  
+          <button
+            onClick={() => {
+              setUserRole('analyst');
+              setView('analyst');
+            }}
+            className="w-full flex items-center justify-center gap-2 border-2 border-blue-600 text-blue-600 py-4 rounded-lg font-semibold hover:bg-blue-50 transition"
+          >
+            <Lock size={20} />
+            Sign in as Analyst
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+  
+
   const WelcomeScreen = () => (
     <div className="min-h-screen flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, #005A8C 100%)` }}>
       <div className="text-center text-white p-8 max-w-3xl">
@@ -175,8 +217,13 @@ const StartupInvestmentPlatform = () => {
             <Building2 size={32} />
             <h1 className="text-2xl font-bold">Founder Application Portal</h1>
           </div>
-          <button onClick={() => setView('welcome')} className="text-white opacity-80 hover:opacity-100">
-            Back to Home
+          <button onClick={() => {
+            setUserRole(null);
+            setView('welcome');
+            }}
+            className="text-white opacity-80 hover:opacity-100"
+            >
+            Sign Out
           </button>
         </div>
       </div>
@@ -321,9 +368,14 @@ const StartupInvestmentPlatform = () => {
               <BarChart3 size={32} />
               <h1 className="text-2xl font-bold">AI Evaluation Results</h1>
             </div>
-            <button onClick={() => setView('welcome')} className="text-white opacity-80 hover:opacity-100">
-              Back to Home
-            </button>
+            <button onClick={() => {
+            setUserRole(null);
+            setView('welcome');
+            }}
+            className="text-white opacity-80 hover:opacity-100"
+            >
+            Sign Out
+          </button>
           </div>
         </div>
 
@@ -544,8 +596,13 @@ const StartupInvestmentPlatform = () => {
             <Lock size={32} />
             <h1 className="text-2xl font-bold">Bank Analyst Dashboard</h1>
           </div>
-          <button onClick={() => setView('welcome')} className="text-white opacity-80 hover:opacity-100">
-            Back to Home
+          <button onClick={() => {
+            setUserRole(null);
+            setView('welcome');
+            }}
+            className="text-white opacity-80 hover:opacity-100"
+            >
+            Sign Out
           </button>
         </div>
       </div>
@@ -643,12 +700,18 @@ const StartupInvestmentPlatform = () => {
 
   return (
     <div className="font-sans">
-      {view === 'welcome' && <WelcomeScreen />}
-      {view === 'founder' && <FounderIntake />}
-      {view === 'results' && <ResultsView />}
-      {view === 'analyst' && <AnalystDashboard />}
+      {view === 'welcome' && <SignInScreen />}
+  
+      {view === 'founder' && userRole === 'founder' && <FounderIntake />}
+      {view === 'results' && userRole === 'founder' && <ResultsView />}
+  
+      {view === 'analyst' && userRole === 'analyst' && <AnalystDashboard />}
+  
+      {/* Fallback safety */}
+      {view !== 'welcome' && !userRole && <SignInScreen />}
     </div>
   );
+  
 };
 
 export default StartupInvestmentPlatform;
