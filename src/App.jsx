@@ -141,6 +141,7 @@ const StartupInvestmentPlatform = () => {
     
     setEvaluationData(mockEvaluation);
     setView('results');
+    window.scrollTo(0, 0);
   };
 
   const SignInScreen = () => (
@@ -580,7 +581,7 @@ const StartupInvestmentPlatform = () => {
                 <h4 className="font-bold mb-2" style={{ color: colors.primary }}>Human Decision Authority</h4>
                 <p className="text-gray-700">
                   This AI evaluation provides data-driven insights to support investment decisions. Final approval authority 
-                  rests with BMO investment analysts and decision-makers. This recommendation should be reviewed in context 
+                  rests with BMO investment analysts and decision-makers. This recommendation will be reviewed in context 
                   of portfolio strategy, market conditions, and qualitative factors beyond AI assessment.
                 </p>
               </div>
