@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Building2, TrendingUp, Shield, CheckCircle, XCircle, AlertCircle, Upload, BarChart3, FileText, Users, DollarSign, Lock, Scale, Target, PieChart, Activity, AlertTriangle } from 'lucide-react';
+import bmoLogo from './assets/bmo-logo.png';
 
 const SimpleLineChart = ({ color }) => (
   <svg viewBox="0 0 100 30" className="w-full h-16 opacity-50">
@@ -230,8 +231,12 @@ const StartupInvestmentPlatform = () => {
       style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, #005A8C 100%)` }}
     >
       <div className="bg-white rounded-xl shadow-xl p-10 max-w-md w-full text-center">
-        <Building2 size={56} className="mx-auto mb-4 text-blue-600" />
-        <h1 className="text-3xl font-bold mb-2">BMO Innovation Platform</h1>
+      <img 
+          src={bmoLogo} 
+          alt="BMO Logo" 
+          className="mx-auto mb-8 h-30 w-40 object-contain"
+        />
+        <h1 className="text-3xl font-bold mb-2">VentureLens</h1>
         <p className="text-gray-600 mb-8">
           Sign in to continue
         </p>
