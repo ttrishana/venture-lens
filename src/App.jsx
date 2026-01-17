@@ -1,5 +1,26 @@
 import React, { useState } from 'react';
-import { Building2, TrendingUp, Shield, CheckCircle, XCircle, AlertCircle, Upload, BarChart3, FileText, Users, DollarSign, Lock, Scale, Target } from 'lucide-react';
+import { Building2, TrendingUp, Shield, CheckCircle, XCircle, AlertCircle, Upload, BarChart3, FileText, Users, DollarSign, Lock, Scale, Target, PieChart, Activity, AlertTriangle } from 'lucide-react';
+
+const SimpleLineChart = ({ color }) => (
+  <svg viewBox="0 0 100 30" className="w-full h-16 opacity-50">
+    <path
+      d="M0,25 C10,25 10,10 20,10 C30,10 30,20 40,20 C50,20 50,5 60,5 C70,5 70,15 80,15 C90,15 90,0 100,0 L100,30 L0,30 Z"
+      fill={`url(#gradient-${color})`}
+    />
+    <path
+      d="M0,25 C10,25 10,10 20,10 C30,10 30,20 40,20 C50,20 50,5 60,5 C70,5 70,15 80,15 C90,15 90,0 100,0"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+    />
+    <defs>
+      <linearGradient id={`gradient-${color}`} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor={color} stopOpacity="0.2" />
+        <stop offset="100%" stopColor={color} stopOpacity="0" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
 
 const StartupInvestmentPlatform = () => {
   const [view, setView] = useState('welcome');
@@ -284,7 +305,7 @@ const StartupInvestmentPlatform = () => {
         <h2 className="text-3xl font-bold mb-4" style={{ color: colors.text }}>Application Received!</h2>
         <p className="text-gray-600 text-lg mb-8">
           Thank you for submitting your proposal to BMO. Our AI system is currently reviewing your application. 
-          Please stay tuned for a response within 24-48 hours.
+          Please stay tuned for a response.
         </p>
         <button 
             onClick={() => {
@@ -684,99 +705,220 @@ const StartupInvestmentPlatform = () => {
     );
   };
 
-  const AnalystDashboard = () => (
-    <div className="min-h-screen bg-gray-50">
-      <div style={{ backgroundColor: colors.primary }} className="text-white p-6 shadow-lg">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <Lock size={32} />
-            <h1 className="text-2xl font-bold">Bank Analyst Dashboard</h1>
+  const AnalystDashboard = () => {
+    // Mock aggregated statistics for the charts (representing the broader dataset)
+    const portfolioStats = {
+        totalCapital: '$42.5M',
+        avgScore: 74,
+        sectors: [
+            { name: 'FinTech', count: 45, width: '45%' },
+            { name: 'HealthTech', count: 28, width: '28%' },
+            { name: 'CleanTech', count: 15, width: '15%' },
+            { name: 'AgriTech', count: 12, width: '12%' }
+        ],
+        risk: {
+            low: 35,    // Safe bets
+            medium: 50, // Standard venture risk
+            high: 15    // High risk / Moonshots
+        }
+    };
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div style={{ backgroundColor: colors.primary }} className="text-white p-6 shadow-lg">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <Lock size={32} />
+              <div>
+                <h1 className="text-2xl font-bold">VentureLens Analyst Dashboard</h1>
+                <p className="text-blue-100 text-sm">Portfolio Overview & Governance</p>
+              </div>
+            </div>
+            <button onClick={() => { setUserRole(null); setView('welcome'); }} className="text-white opacity-80 hover:opacity-100">
+              Sign Out
+            </button>
           </div>
-          <button onClick={() => {
-            setUserRole(null);
-            setView('welcome');
-            }}
-            className="text-white opacity-80 hover:opacity-100"
-            >
-            Sign Out
-          </button>
         </div>
-      </div>
+  
+        <div className="max-w-7xl mx-auto p-8 space-y-8">
+            
+          {/* NEW: Top Level KPI Cards */}
+          <div className="grid grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4" style={{ borderColor: colors.primary }}>
+                <div className="flex justify-between items-start mb-2">
+                    <div>
+                        <p className="text-gray-500 text-sm font-medium">Pending Reviews</p>
+                        <h3 className="text-3xl font-bold text-gray-800">{submissions.length + 14}</h3>
+                    </div>
+                    <FileText size={24} className="text-gray-400" />
+                </div>
+                <p className="text-xs text-green-600 font-medium flex items-center gap-1">
+                    <TrendingUp size={12} /> +12% from last week
+                </p>
+            </div>
 
-      <div className="max-w-6xl mx-auto p-8">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-bold mb-6" style={{ color: colors.text }}>Recent Submissions</h2>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b-2" style={{ borderColor: colors.primary }}>
-                  <th className="text-left p-3">Company</th>
-                  <th className="text-left p-3">Stage</th>
-                  <th className="text-left p-3">Industry</th>
-                  <th className="text-left p-3">AI Score</th>
-                  <th className="text-left p-3">Recommendation</th>
-                  <th className="text-left p-3">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* CHANGED: Map over the 'submissions' state instead of static rows */}
-                {submissions.map((sub, index) => {
-                    const rec = sub.evaluation.recommendation;
-                    const score = sub.evaluation.confidence;
-                    const color = rec === 'Fund' ? colors.success : rec === 'Partially Fund' ? colors.warning : colors.secondary;
-                    const scoreColor = score > 75 ? 'text-green-600' : score > 50 ? 'text-yellow-600' : 'text-red-600';
-                    
-                    return (
-                        <tr key={index} className="border-b hover:bg-gray-50">
-                        <td className="p-3 font-semibold">{sub.companyName}</td>
-                        <td className="p-3">{sub.stage || 'N/A'}</td>
-                        <td className="p-3">{sub.industry}</td>
-                        <td className="p-3">
-                            <span className={`font-bold ${scoreColor}`}>{score}%</span>
-                        </td>
-                        <td className="p-3">
-                            <span className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ backgroundColor: color }}>
-                            {rec}
-                            </span>
-                        </td>
-                        <td className="p-3">
-                            {/* CHANGED: Button now triggers openReport with specific submission data */}
-                            <button 
-                                onClick={() => openReport(sub)}
-                                className="text-blue-600 hover:underline font-semibold"
-                            >
-                                Review Details
-                            </button>
-                        </td>
-                        </tr>
-                    );
-                })}
-              </tbody>
-            </table>
+            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4" style={{ borderColor: colors.success }}>
+                <div className="flex justify-between items-start mb-2">
+                    <div>
+                        <p className="text-gray-500 text-sm font-medium">Avg AI Confidence</p>
+                        <h3 className="text-3xl font-bold text-gray-800">{portfolioStats.avgScore}%</h3>
+                    </div>
+                    <BarChart3 size={24} className="text-gray-400" />
+                </div>
+                <p className="text-xs text-gray-500">Based on 142 assessments</p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm border-l-4" style={{ borderColor: colors.warning }}>
+                <div className="flex justify-between items-start mb-2">
+                    <div>
+                        <p className="text-gray-500 text-sm font-medium">Capital Demand</p>
+                        <h3 className="text-3xl font-bold text-gray-800">{portfolioStats.totalCapital}</h3>
+                    </div>
+                    <DollarSign size={24} className="text-gray-400" />
+                </div>
+                <p className="text-xs text-gray-500">Total requested funding</p>
+            </div>
+
+            {/* Responsible AI Monitor - Directly addresses 'Governance' in case */}
+            <div className="bg-blue-900 p-6 rounded-lg shadow-sm text-white">
+                <div className="flex justify-between items-start mb-2">
+                    <div>
+                        <p className="text-blue-200 text-sm font-medium">AI Governance</p>
+                        <h3 className="text-xl font-bold">Healthy</h3>
+                    </div>
+                    <Shield size={24} className="text-blue-300" />
+                </div>
+                <div className="space-y-1 mt-2">
+                    <div className="flex justify-between text-xs">
+                        <span className="text-blue-200">Fairness Check</span>
+                        <span className="text-green-400">Pass</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                        <span className="text-blue-200">Model Drift</span>
+                        <span className="text-green-400">0.4% (Low)</span>
+                    </div>
+                </div>
+            </div>
           </div>
 
-          <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-            <h3 className="font-bold mb-4" style={{ color: colors.text }}>Portfolio Insights</h3>
-            <div className="grid grid-cols-3 gap-6">
-              <div className="text-center">
-                <p className="text-3xl font-bold" style={{ color: colors.success }}>12</p>
-                <p className="text-gray-600">Recommended to Fund</p>
-              </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold" style={{ color: colors.warning }}>8</p>
-                <p className="text-gray-600">Partial Funding</p>
-              </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold" style={{ color: colors.secondary }}>15</p>
-                <p className="text-gray-600">Declined</p>
-              </div>
+          {/* NEW: Charts Row */}
+          <div className="grid grid-cols-2 gap-8">
+             
+             {/* Sector Distribution Chart */}
+             <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+                    <PieChart size={20} className="text-gray-500" />
+                    Incoming Sector Distribution
+                </h3>
+                <div className="space-y-4">
+                    {portfolioStats.sectors.map((sector, i) => (
+                        <div key={i}>
+                            <div className="flex justify-between text-sm mb-1">
+                                <span className="font-medium">{sector.name}</span>
+                                <span className="text-gray-500">{sector.count} deals</span>
+                            </div>
+                            <div className="w-full bg-gray-100 rounded-full h-3">
+                                <div 
+                                    className="h-3 rounded-full transition-all duration-1000"
+                                    style={{ 
+                                        width: sector.width, 
+                                        backgroundColor: i === 0 ? colors.primary : colors.text 
+                                    }}
+                                ></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+             </div>
+
+             {/* Risk vs Volume Matrix */}
+             <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+                    <Activity size={20} className="text-gray-500" />
+                    Risk Profile Analysis
+                </h3>
+                <div className="flex items-end justify-between h-40 px-4 space-x-8">
+                    {/* Low Risk Bar */}
+                    <div className="w-1/3 flex flex-col items-center gap-2">
+                        <span className="text-2xl font-bold text-gray-700">{portfolioStats.risk.low}%</span>
+                        <div className="w-full bg-green-500 rounded-t-lg transition-all hover:opacity-90" style={{ height: '35%' }}></div>
+                        <span className="text-sm font-medium text-gray-500">Low Risk</span>
+                    </div>
+                    {/* Medium Risk Bar */}
+                    <div className="w-1/3 flex flex-col items-center gap-2">
+                        <span className="text-2xl font-bold text-gray-700">{portfolioStats.risk.medium}%</span>
+                        <div className="w-full bg-yellow-400 rounded-t-lg transition-all hover:opacity-90" style={{ height: '50%' }}></div>
+                        <span className="text-sm font-medium text-gray-500">Medium Risk</span>
+                    </div>
+                    {/* High Risk Bar */}
+                    <div className="w-1/3 flex flex-col items-center gap-2">
+                        <span className="text-2xl font-bold text-gray-700">{portfolioStats.risk.high}%</span>
+                        <div className="w-full bg-red-500 rounded-t-lg transition-all hover:opacity-90" style={{ height: '15%' }}></div>
+                        <span className="text-sm font-medium text-gray-500">High Risk</span>
+                    </div>
+                </div>
+                <div className="mt-4 p-3 bg-gray-50 rounded text-xs text-gray-600 border border-gray-200">
+                    <span className="font-bold">Insight:</span> FinTech proposals are currently showing 15% lower risk profiles than the 6-month average.
+                </div>
+             </div>
+          </div>
+  
+          {/* Recent Submissions Table (Existing Logic) */}
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            <h2 className="text-2xl font-bold mb-6" style={{ color: colors.text }}>Incoming Submissions</h2>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b-2" style={{ borderColor: colors.primary }}>
+                    <th className="text-left p-3">Company</th>
+                    <th className="text-left p-3">Stage</th>
+                    <th className="text-left p-3">Industry</th>
+                    <th className="text-left p-3">AI Score</th>
+                    <th className="text-left p-3">Recommendation</th>
+                    <th className="text-left p-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {submissions.map((sub, index) => {
+                      const rec = sub.evaluation.recommendation;
+                      const score = sub.evaluation.confidence;
+                      const color = rec === 'Fund' ? colors.success : rec === 'Partially Fund' ? colors.warning : colors.secondary;
+                      const scoreColor = score > 75 ? 'text-green-600' : score > 50 ? 'text-yellow-600' : 'text-red-600';
+                      
+                      return (
+                          <tr key={index} className="border-b hover:bg-gray-50">
+                          <td className="p-3 font-semibold">{sub.companyName}</td>
+                          <td className="p-3">{sub.stage || 'N/A'}</td>
+                          <td className="p-3">{sub.industry}</td>
+                          <td className="p-3">
+                              <span className={`font-bold ${scoreColor}`}>{score}%</span>
+                          </td>
+                          <td className="p-3">
+                              <span className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ backgroundColor: color }}>
+                              {rec}
+                              </span>
+                          </td>
+                          <td className="p-3">
+                              <button 
+                                  onClick={() => openReport(sub)}
+                                  className="text-blue-600 hover:underline font-semibold"
+                              >
+                                  Review Details
+                              </button>
+                          </td>
+                          </tr>
+                      );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
+
 
   return (
     <div className="font-sans">
