@@ -14,11 +14,57 @@ const StartupInvestmentPlatform = () => {
   });
   const [userRole, setUserRole] = useState(null); // 'founder' | 'analyst' | null
 
+  const [submissions, setSubmissions] = useState([
+    // Pre-populating with the static data you originally had in the table
+    {
+      companyName: 'FinFlow Technologies',
+      stage: 'Early Revenue',
+      industry: 'FinTech',
+      evaluation: { 
+        recommendation: 'Fund', 
+        confidence: 79,
+        // Mock data for pre-filled items to prevent crash on view
+        classification: 'FinTech / Digital Banking',
+        analogousIndustries: [],
+        dimensions: { financial: { score: 80, metrics: {} }, technology: { score: 75, metrics: {} }, operations: { score: 70, metrics: {} }, strategy: { score: 85, metrics: {} } },
+        risks: [],
+        projections: { year1: { revenue: 0, growth: 0, roi: 0 }, year3: { revenue: 0, growth: 0, roi: 0 }, year5: { revenue: 0, growth: 0, roi: 0 } }
+      }
+    },
+    {
+      companyName: 'HealthSync AI',
+      stage: 'MVP',
+      industry: 'HealthTech',
+      evaluation: { 
+        recommendation: 'Partially Fund', 
+        confidence: 68,
+        classification: 'HealthTech',
+        analogousIndustries: [],
+        dimensions: { financial: { score: 65, metrics: {} }, technology: { score: 80, metrics: {} }, operations: { score: 60, metrics: {} }, strategy: { score: 70, metrics: {} } },
+        risks: [],
+        projections: { year1: { revenue: 0, growth: 0, roi: 0 }, year3: { revenue: 0, growth: 0, roi: 0 }, year5: { revenue: 0, growth: 0, roi: 0 } }
+      }
+    },
+    {
+      companyName: 'CryptoVault Pro',
+      stage: 'Idea',
+      industry: 'Blockchain',
+      evaluation: { 
+        recommendation: 'Decline', 
+        confidence: 42,
+        classification: 'Blockchain',
+        analogousIndustries: [],
+        dimensions: { financial: { score: 40, metrics: {} }, technology: { score: 50, metrics: {} }, operations: { score: 30, metrics: {} }, strategy: { score: 40, metrics: {} } },
+        risks: [],
+        projections: { year1: { revenue: 0, growth: 0, roi: 0 }, year3: { revenue: 0, growth: 0, roi: 0 }, year5: { revenue: 0, growth: 0, roi: 0 } }
+      }
+    }
+  ]);
 
   const loadSampleStartup = () => {
     setFormData({
       companyName: 'PayStream Analytics',
-      stage: 'early',
+      stage: 'Early Revenue',
       industry: 'FinTech / Embedded Finance',
       problemStatement: 'Small and medium businesses struggle to predict cash flow accurately, leading to 82% of business failures due to poor cash management. Traditional accounting software only shows historical data, leaving business owners blind to upcoming financial challenges. Banks have limited visibility into SMB financial health beyond credit scores, making lending decisions slower and riskier.',
       solution: 'PayStream Analytics uses AI to predict cash flow 90 days ahead with 94% accuracy by analyzing invoice patterns, payment histories, seasonal trends, and market signals. Our embedded finance platform integrates directly into existing banking apps, providing real-time insights to both businesses and their banks. For SMBs: predictive alerts prevent overdrafts and optimize payment timing. For banks: enhanced credit risk assessment enables faster loan approvals and proactive relationship management.',
@@ -138,8 +184,21 @@ const StartupInvestmentPlatform = () => {
         'Competitive moat relies heavily on prediction accuracy and bank relationships'
       ] : []
     };
-    
-    setEvaluationData(mockEvaluation);
+
+    // CHANGED: Instead of setting evaluationData and view directly, add to submissions list
+    const newSubmission = {
+      ...formData,
+      evaluation: mockEvaluation
+    };
+
+    setSubmissions([newSubmission, ...submissions]); // Add new submission to the TOP of the list
+    setView('success'); // Send Founder to success page
+    window.scrollTo(0, 0);
+  };
+
+  const openReport = (submission) => {
+    setFormData(submission);
+    setEvaluationData(submission.evaluation);
     setView('results');
     window.scrollTo(0, 0);
   };
@@ -209,6 +268,39 @@ const StartupInvestmentPlatform = () => {
             Analyst Dashboard
           </button>
         </div>
+      </div>
+    </div>
+  );
+
+  const SubmissionSuccess = () => (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="bg-white rounded-xl shadow-xl p-10 max-w-lg w-full text-center">
+        <div className="mb-6 flex justify-center">
+            {/* Simple CSS animation for the checkmark */}
+            <div className="rounded-full bg-green-100 p-4 animate-bounce">
+                <CheckCircle size={64} style={{ color: colors.success }} />
+            </div>
+        </div>
+        <h2 className="text-3xl font-bold mb-4" style={{ color: colors.text }}>Application Received!</h2>
+        <p className="text-gray-600 text-lg mb-8">
+          Thank you for submitting your proposal to BMO. Our AI system is currently reviewing your application. 
+          Please stay tuned for a response within 24-48 hours.
+        </p>
+        <button 
+            onClick={() => {
+                setFormData({ companyName: '', stage: '', industry: '', problemStatement: '', solution: '', capitalNeeded: '', currentRevenue: '' });
+                setView('founder');
+            }}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+        >
+            Submit Another Application
+        </button>
+        <button 
+            onClick={() => { setUserRole(null); setView('welcome'); }}
+            className="mt-4 text-gray-500 hover:text-gray-700 font-medium"
+        >
+            Sign Out
+        </button>
       </div>
     </div>
   );
@@ -628,54 +720,38 @@ const StartupInvestmentPlatform = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b hover:bg-gray-50">
-                  <td className="p-3 font-semibold">FinFlow Technologies</td>
-                  <td className="p-3">Early Revenue</td>
-                  <td className="p-3">FinTech</td>
-                  <td className="p-3">
-                    <span className="font-bold text-green-600">79%</span>
-                  </td>
-                  <td className="p-3">
-                    <span className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ backgroundColor: colors.success }}>
-                      Fund
-                    </span>
-                  </td>
-                  <td className="p-3">
-                    <button className="text-blue-600 hover:underline">Review Details</button>
-                  </td>
-                </tr>
-                <tr className="border-b hover:bg-gray-50">
-                  <td className="p-3 font-semibold">HealthSync AI</td>
-                  <td className="p-3">MVP</td>
-                  <td className="p-3">HealthTech</td>
-                  <td className="p-3">
-                    <span className="font-bold text-yellow-600">68%</span>
-                  </td>
-                  <td className="p-3">
-                    <span className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ backgroundColor: colors.warning }}>
-                      Partial Fund
-                    </span>
-                  </td>
-                  <td className="p-3">
-                    <button className="text-blue-600 hover:underline">Review Details</button>
-                  </td>
-                </tr>
-                <tr className="border-b hover:bg-gray-50">
-                  <td className="p-3 font-semibold">CryptoVault Pro</td>
-                  <td className="p-3">Idea</td>
-                  <td className="p-3">Blockchain</td>
-                  <td className="p-3">
-                    <span className="font-bold text-red-600">42%</span>
-                  </td>
-                  <td className="p-3">
-                    <span className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ backgroundColor: colors.secondary }}>
-                      Decline
-                    </span>
-                  </td>
-                  <td className="p-3">
-                    <button className="text-blue-600 hover:underline">Review Details</button>
-                  </td>
-                </tr>
+                {/* CHANGED: Map over the 'submissions' state instead of static rows */}
+                {submissions.map((sub, index) => {
+                    const rec = sub.evaluation.recommendation;
+                    const score = sub.evaluation.confidence;
+                    const color = rec === 'Fund' ? colors.success : rec === 'Partially Fund' ? colors.warning : colors.secondary;
+                    const scoreColor = score > 75 ? 'text-green-600' : score > 50 ? 'text-yellow-600' : 'text-red-600';
+                    
+                    return (
+                        <tr key={index} className="border-b hover:bg-gray-50">
+                        <td className="p-3 font-semibold">{sub.companyName}</td>
+                        <td className="p-3">{sub.stage || 'N/A'}</td>
+                        <td className="p-3">{sub.industry}</td>
+                        <td className="p-3">
+                            <span className={`font-bold ${scoreColor}`}>{score}%</span>
+                        </td>
+                        <td className="p-3">
+                            <span className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ backgroundColor: color }}>
+                            {rec}
+                            </span>
+                        </td>
+                        <td className="p-3">
+                            {/* CHANGED: Button now triggers openReport with specific submission data */}
+                            <button 
+                                onClick={() => openReport(sub)}
+                                className="text-blue-600 hover:underline font-semibold"
+                            >
+                                Review Details
+                            </button>
+                        </td>
+                        </tr>
+                    );
+                })}
               </tbody>
             </table>
           </div>
@@ -705,17 +781,20 @@ const StartupInvestmentPlatform = () => {
   return (
     <div className="font-sans">
       {view === 'welcome' && <SignInScreen />}
-  
+      
       {view === 'founder' && userRole === 'founder' && <FounderIntake />}
-      {view === 'results' && userRole === 'founder' && <ResultsView />}
+      
+      {/* CHANGED: Added Success View */}
+      {view === 'success' && <SubmissionSuccess />}
+      
+      {/* CHANGED: Allow Analyst to see Results View now */}
+      {view === 'results' && <ResultsView />} 
   
       {view === 'analyst' && userRole === 'analyst' && <AnalystDashboard />}
   
-      {/* Fallback safety */}
       {view !== 'welcome' && !userRole && <SignInScreen />}
     </div>
   );
-  
 };
 
 export default StartupInvestmentPlatform;
