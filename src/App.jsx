@@ -723,6 +723,11 @@ const StartupInvestmentPlatform = () => {
         }
     };
 
+    const riskGradient = `conic-gradient(
+      ${colors.success} 0deg 126deg, 
+      ${colors.warning} 126deg 306deg, 
+      ${colors.secondary} 306deg 360deg)`;
+
     return (
       <div className="min-h-screen bg-gray-50">
         <div style={{ backgroundColor: colors.primary }} className="text-white p-6 shadow-lg">
@@ -831,34 +836,48 @@ const StartupInvestmentPlatform = () => {
                 </div>
              </div>
 
-             {/* Risk vs Volume Matrix */}
+             {/* Risk Analysis (NEW: Donut Chart) */}
              <div className="bg-white p-6 rounded-lg shadow-lg">
                 <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
                     <Activity size={20} className="text-gray-500" />
                     Risk Profile Analysis
                 </h3>
-                <div className="flex items-end justify-between h-40 px-4 space-x-8">
-                    {/* Low Risk Bar */}
-                    <div className="w-1/3 flex flex-col items-center gap-2">
-                        <span className="text-2xl font-bold text-gray-700">{portfolioStats.risk.low}%</span>
-                        <div className="w-full bg-green-500 rounded-t-lg transition-all hover:opacity-90" style={{ height: '35%' }}></div>
-                        <span className="text-sm font-medium text-gray-500">Low Risk</span>
+                
+                <div className="flex items-center justify-around h-40">
+                    {/* The Chart Circle */}
+                    <div className="relative w-32 h-32 rounded-full flex items-center justify-center shadow-inner"
+                         style={{ background: riskGradient }}>
+                        {/* Inner white circle to make it a donut */}
+                        <div className="w-24 h-24 bg-white rounded-full flex flex-col items-center justify-center shadow-sm">
+                            <span className="text-2xl font-bold text-gray-800">142</span>
+                            <span className="text-xs text-gray-500">Deals</span>
+                        </div>
                     </div>
-                    {/* Medium Risk Bar */}
-                    <div className="w-1/3 flex flex-col items-center gap-2">
-                        <span className="text-2xl font-bold text-gray-700">{portfolioStats.risk.medium}%</span>
-                        <div className="w-full bg-yellow-400 rounded-t-lg transition-all hover:opacity-90" style={{ height: '50%' }}></div>
-                        <span className="text-sm font-medium text-gray-500">Medium Risk</span>
+
+                    {/* The Legend */}
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: colors.success }}></div>
+                            <div>
+                                <p className="text-sm font-bold text-gray-700">{portfolioStats.risk.low}% Low Risk</p>
+                                <p className="text-xs text-gray-500">Auto-Fund Eligible</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: colors.warning }}></div>
+                            <div>
+                                <p className="text-sm font-bold text-gray-700">{portfolioStats.risk.medium}% Medium Risk</p>
+                                <p className="text-xs text-gray-500">Requires Review</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: colors.secondary }}></div>
+                            <div>
+                                <p className="text-sm font-bold text-gray-700">{portfolioStats.risk.high}% High Risk</p>
+                                <p className="text-xs text-gray-500">Auto-Flagged</p>
+                            </div>
+                        </div>
                     </div>
-                    {/* High Risk Bar */}
-                    <div className="w-1/3 flex flex-col items-center gap-2">
-                        <span className="text-2xl font-bold text-gray-700">{portfolioStats.risk.high}%</span>
-                        <div className="w-full bg-red-500 rounded-t-lg transition-all hover:opacity-90" style={{ height: '15%' }}></div>
-                        <span className="text-sm font-medium text-gray-500">High Risk</span>
-                    </div>
-                </div>
-                <div className="mt-4 p-3 bg-gray-50 rounded text-xs text-gray-600 border border-gray-200">
-                    <span className="font-bold">Insight:</span> FinTech proposals are currently showing 15% lower risk profiles than the 6-month average.
                 </div>
              </div>
           </div>
